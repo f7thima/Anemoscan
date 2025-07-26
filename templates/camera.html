@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload/Take Image</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Check for Anemia</h2>
+    <p>Upload or take a clear image of your nail bed under good lighting.</p>
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" required />
+      <button type="submit">Upload Image</button>
+    </form>
+  </div>
+  {% include 'nav.html' %}
+</body>
+</html>
+
+
+
