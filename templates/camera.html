@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Upload/Take Image</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Camera</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <h2>Check for Anemia</h2>
-    <p>Upload or take a clear image of your nail bed under good lighting.</p>
-    <form action="/predict" method="POST" enctype="multipart/form-data">
-      <input type="file" name="image" accept="image/*" required />
-      <button type="submit">Upload Image</button>
+<div class="container">
+    <h2>Upload or Take a Photo</h2>
+    <form action="/camera" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" capture="environment">
+        <button type="submit">Upload Image</button>
     </form>
-  </div>
-  {% include 'nav.html' %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <p style="color:red;">{{ messages[0] }}</p>
+      {% endif %}
+    {% endwith %}
+</div>
+<div class="navbar">
+    <a href="/"><i>🏠</i>Home</a>
+    <a href="/profile"><i>👤</i>Profile</a>
+    <a href="/camera"><i>📷</i>Camera</a>
+    <a href="/dashboard"><i>📊</i>Dashboard</a>
+</div>
 </body>
 </html>
+
 
 
 

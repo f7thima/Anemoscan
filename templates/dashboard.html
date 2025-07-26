@@ -1,33 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <h2>Health Analysis</h2>
-    <canvas id="anemiaChart" width="300" height="300"></canvas>
-  </div>
-
-  <script>
-    const ctx = document.getElementById('anemiaChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Symptoms', 'Unclear', 'Normal'],
-        datasets: [{
-          data: [2, 1, 4],
-          backgroundColor: ['#e74c3c', '#f1c40f', '#2ecc71']
-        }]
-      }
-    });
-  </script>
-  {% include 'nav.html' %}
+<div class="container">
+    <h2>Dashboard</h2>
+    <p>Status: <span style="color: green;">✔ Normal</span></p>
+    <img src="{{ url_for('static', filename='chart_placeholder.png') }}" width="100%">
+</div>
+<div class="navbar">
+    <a href="/"><i>🏠</i>Home</a>
+    <a href="/profile"><i>👤</i>Profile</a>
+    <a href="/camera"><i>📷</i>Camera</a>
+    <a href="/dashboard"><i>📊</i>Dashboard</a>
+</div>
 </body>
 </html>
+
 
 
 

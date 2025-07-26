@@ -1,52 +1,75 @@
 body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #e8f5f9;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #e6f3f8;
+    color: #333;
 }
 
 .container {
-  max-width: 500px;
-  margin: 60px auto;
-  padding: 30px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  text-align: center;
+    max-width: 400px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
-input, button {
-  padding: 12px;
-  margin: 10px 0;
-  width: 90%;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+h2 {
+    text-align: center;
+    color: #0077b6;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.gender-options {
+    margin-top: 10px;
+}
+
+.gender-options label {
+    margin-right: 15px;
 }
 
 button {
-  background-color: #2ba6cb;
-  color: white;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 button:hover {
-  background-color: #1e8fb3;
+    background: #023e8a;
 }
 
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #ffffff;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid #ccc;
+.navbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #0077b6;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
 }
 
-.bottom-nav img {
-  width: 28px;
-  height: 28px;
+.navbar a {
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 14px;
 }
+
+.navbar a i {
+    display: block;
+    font-size: 20px;
+}
+

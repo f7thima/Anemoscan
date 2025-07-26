@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Profile</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <h2>Your Profile</h2>
-    <form method="POST">
-      <input type="text" name="name" placeholder="Name" required />
-      <input type="number" name="age" placeholder="Age" required />
-      <label>Gender:</label><br />
-      <input type="radio" name="gender" value="Male" required> Male
-      <input type="radio" name="gender" value="Female" required> Female<br />
-      <button type="submit">Save</button>
+<div class="container">
+    <h2>Profile</h2>
+    <form action="/profile" method="post">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <div class="gender-options">
+            <label><input type="radio" name="gender" value="Male" required> Male</label>
+            <label><input type="radio" name="gender" value="Female" required> Female</label>
+            <label><input type="radio" name="gender" value="Other" required> Other</label>
+        </div>
+        <input type="date" name="dob" required />
+        <button type="submit">Save Profile</button>
     </form>
-  </div>
-  {% include 'nav.html' %}
+</div>
 </body>
 </html>
+
 
 
 

@@ -1,42 +1,63 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import os
 
 app = Flask(__name__)
+app.secret_key = 'secretkey'
 UPLOAD_FOLDER = 'static/uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+users = {}  # Temporary in-memory storage
+user_profile = {}
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    password = request.form['password']
+    if email in users and users[email] == password:
+        return redirect(url_for('profile'))
+    else:
+        flash("You don't have an account or wrong password. Please create one.")
+        return redirect(url_for('index'))
+
+@app.route('/create_account')
+def create_account():
+    return render_template('create_account.html')
+
+@app.route('/register', methods=['POST'])
+def register():
+    email = request.form['email']
+    password = request.form['password']
+    users[email] = password
+    return redirect(url_for('profile'))
+
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if request.method == 'POST':
-        name = request.form['name']
-        gender = request.form['gender']
-        age = request.form['age']
-        return redirect(url_for('dashboard'))
+        user_profile['name'] = request.form['name']
+        user_profile['gender'] = request.form['gender']
+        user_profile['dob'] = request.form['dob']
+        return redirect(url_for('camera'))
     return render_template('profile.html')
 
-@app.route('/camera')
+@app.route('/camera', methods=['GET', 'POST'])
 def camera():
+    if request.method == 'POST':
+        file = request.files.get('image')
+        if not file or file.filename == '':
+            flash('No file chosen. Please select or take a photo.')
+            return redirect(url_for('camera'))
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        return redirect(url_for('result'))
     return render_template('camera.html')
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    if 'image' in request.files:
-        image = request.files['image']
-        if image.filename != '':
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], image.filename))
-            # You can add ML prediction here later
-            result = "Possible symptoms detected"
-            return render_template('result.html', result=result)
-    return redirect(url_for('camera'))
 
 @app.route('/result')
 def result():
-    return render_template('result.html', result="Upload an image first")
+    return render_template('result.html')
 
 @app.route('/dashboard')
 def dashboard():
@@ -44,6 +65,7 @@ def dashboard():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
