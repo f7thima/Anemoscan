@@ -1,6 +1,26 @@
+<!-- templates/nav.html -->
 <div class="bottom-nav">
-  <a href="/"><img src="{{ url_for('static', filename='icons/home.png') }}" alt="Home" /></a>
-  <a href="/profile"><img src="{{ url_for('static', filename='icons/user.png') }}" alt="Profile" /></a>
-  <a href="/camera"><img src="{{ url_for('static', filename='icons/camera.png') }}" alt="Camera" /></a>
-  <a href="/dashboard"><img src="{{ url_for('static', filename='icons/chart.png') }}" alt="Dashboard" /></a>
+  <a href="{{ url_for('dashboard') }}">
+    <img class="nav-icon" src="{{ url_for('static', filename='icons/dashboard.png') }}" alt="Dashboard" />
+  </a>
+
+  <div class="camera-button" onclick="togglePopup()">
+    <img src="{{ url_for('static', filename='icons/camera.png') }}" alt="Camera" />
+  </div>
+
+  <a href="{{ url_for('result') }}">
+    <img class="nav-icon" src="{{ url_for('static', filename='icons/result.png') }}" alt="Result" />
+  </a>
 </div>
+
+<div class="popup-buttons" id="popupButtons">
+  <button onclick="window.location.href='{{ url_for('camera') }}'">Upload</button>
+  <button onclick="window.location.href='{{ url_for('camera') }}'">Capture</button>
+</div>
+
+<script>
+  function togglePopup() {
+    const popup = document.getElementById('popupButtons');
+    popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+  }
+</script>

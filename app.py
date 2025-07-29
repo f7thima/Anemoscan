@@ -1,71 +1,81 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = 'secretkey'
-UPLOAD_FOLDER = 'static/uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = 'your_secret_key'  # Replace with a strong secret
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-users = {}  # Temporary in-memory storage
-user_profile = {}
+# Create upload folder if it doesn't exist
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
+# 1️⃣ Load Page (Default homepage)
 @app.route('/')
-def index():
-    return render_template('index.html')
+def load_page():
+    return render_template('load.html')
 
-@app.route('/login', methods=['POST'])
+# 2️⃣ Login Page (index.html)
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    email = request.form['email']
-    password = request.form['password']
-    if email in users and users[email] == password:
-        return redirect(url_for('profile'))
-    else:
-        flash("You don't have an account or wrong password. Please create one.")
-        return redirect(url_for('index'))
+    error = None
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        # Dummy credentials
+        if email == 'test@example.com' and password == 'pass':
+            session['email'] = email
+            return redirect(url_for('start'))
+        else:
+            error = 'Invalid credentials. Try again.'
+    return render_template('index.html', error=error)
 
-@app.route('/create_account')
-def create_account():
-    return render_template('create_account.html')
-
-@app.route('/register', methods=['POST'])
+# 3️⃣ Register
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    email = request.form['email']
-    password = request.form['password']
-    users[email] = password
-    return redirect(url_for('profile'))
+    return render_template('register.html')
 
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-    if request.method == 'POST':
-        user_profile['name'] = request.form['name']
-        user_profile['gender'] = request.form['gender']
-        user_profile['dob'] = request.form['dob']
-        return redirect(url_for('camera'))
-    return render_template('profile.html')
+# 4️⃣ Start Page
+@app.route('/start')
+def start():
+    if 'email' not in session:
+        return redirect(url_for('login'))
+    return render_template('start.html')
 
-@app.route('/camera', methods=['GET', 'POST'])
-def camera():
-    if request.method == 'POST':
-        file = request.files.get('image')
-        if not file or file.filename == '':
-            flash('No file chosen. Please select or take a photo.')
-            return redirect(url_for('camera'))
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(filepath)
-        return redirect(url_for('result'))
-    return render_template('camera.html')
-
-@app.route('/result')
-def result():
-    return render_template('result.html')
-
+# 5️⃣ Dashboard
 @app.route('/dashboard')
 def dashboard():
+    if 'email' not in session:
+        return redirect(url_for('login'))
     return render_template('dashboard.html')
 
+# 6️⃣ Result
+@app.route('/result')
+def result():
+    if 'email' not in session:
+        return redirect(url_for('login'))
+    return render_template('result.html')
+
+# 7️⃣ Profile
+@app.route('/profile')
+def profile():
+    if 'email' not in session:
+        return redirect(url_for('login'))
+    return render_template('profile.html')
+
+# 8️⃣ Camera
+@app.route('/camera')
+def camera():
+    if 'email' not in session:
+        return redirect(url_for('login'))
+    return render_template('camera.html')
+
+# 9️⃣ Logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+# Run the app
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-

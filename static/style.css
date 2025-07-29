@@ -1,75 +1,65 @@
 body {
+    font-family: Arial, sans-serif;
+    background-color: #e6f9f9;
+    color: #004d4d;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background: #e6f3f8;
-    color: #333;
+    display: flex;
+    justify-content: center;
 }
 
-.container {
-    max-width: 400px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-}
-
-h2 {
+.profile-container {
+    background-color: #e0f7f7;
+    padding: 30px;
     text-align: center;
-    color: #0077b6;
+    border-radius: 12px;
+    max-width: 450px;
+    margin: 60px auto 20px auto;
+    box-shadow: 0px 0px 12px rgba(0, 128, 128, 0.3);
 }
 
-input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+.info-block {
+    margin: 15px 0;
+    font-size: 17px;
 }
 
-.gender-options {
-    margin-top: 10px;
+.form-input {
+    margin: 8px 0;
+    padding: 8px;
+    width: 90%;
+    border-radius: 6px;
+    border: 1px solid #009999;
 }
 
-.gender-options label {
-    margin-right: 15px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
+.logout-btn {
     margin-top: 20px;
-    background: #0077b6;
+    padding: 10px 18px;
+    background-color: #008080;
     color: white;
     border: none;
     border-radius: 8px;
+    font-size: 15px;
     cursor: pointer;
 }
 
-button:hover {
-    background: #023e8a;
-}
-
-.navbar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #0077b6;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-}
-
-.navbar a {
+.edit-btn {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #009999;
     color: white;
-    text-decoration: none;
-    text-align: center;
+    border: none;
+    border-radius: 6px;
     font-size: 14px;
+    cursor: pointer;
 }
 
-.navbar a i {
-    display: block;
-    font-size: 20px;
+.nav-icons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-evenly;
 }
 
+.nav-icons a img {
+    width: 35px;
+    height: 35px;
+}

@@ -1,26 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <title>Profile - AnemoScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e0f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .phone-container {
+      width: 360px;
+      height: 640px;
+      background-color: white;
+      border-radius: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header {
+      height: 60px;
+      background-color: #0db9b9;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 18px;
+      font-weight: bold;
+      justify-content: space-between;
+    }
+
+    .header img {
+      height: 28px;
+      cursor: pointer;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .main-content p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .main-content input,
+    .main-content select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .main-content button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 20px;
+      margin-top: 12px;
+      background-color: #008080;
+      color: white;
+      cursor: pointer;
+    }
+
+    .main-content button:hover {
+      background-color: #006666;
+    }
+
+    .logout-btn {
+      background-color: #f55d58;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .bottom-nav {
+      height: 60px;
+      background-color: #d6f1f1;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #ccc;
+      position: relative;
+    }
+
+    .nav-icon {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-icon:hover {
+      transform: scale(1.15);
+    }
+
+    .camera-button {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #008080;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .camera-button img {
+      width: 28px;
+      height: 28px;
+      filter: invert(1);
+    }
+
+    .popup-buttons {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .popup-buttons button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      background-color: #008080;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.2s ease;
+    }
+
+    .popup-buttons button:hover {
+      background-color: #006666;
+    }
+  </style>
+
+  <script>
+    function togglePopup() {
+      const popup = document.getElementById('popupButtons');
+      popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function showProfileForm(name = '', gender = '', dob = '') {
+      document.getElementById('profile-form').style.display = 'block';
+      if (name) document.getElementById('name').value = name;
+      if (gender) document.getElementById('gender').value = gender;
+      if (dob) {
+        document.getElementById('dob').value = dob;
+        calculateAge();
+      }
+    }
+
+    function calculateAge() {
+      const dob = document.getElementById('dob').value;
+      if (dob) {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        document.getElementById('age-display').innerText = "Age: " + age;
+      }
+    }
+  </script>
 </head>
 <body>
-<div class="container">
-    <h2>Profile</h2>
-    <form action="/profile" method="post">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <div class="gender-options">
-            <label><input type="radio" name="gender" value="Male" required> Male</label>
-            <label><input type="radio" name="gender" value="Female" required> Female</label>
-            <label><input type="radio" name="gender" value="Other" required> Other</label>
-        </div>
-        <input type="date" name="dob" required />
-        <button type="submit">Save Profile</button>
-    </form>
-</div>
+  <div class="phone-container">
+    <!-- Header -->
+    <div class="header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="https://img.icons8.com/material-rounded/24/menu--v1.png" alt="Menu" />
+        <span>Profile</span>
+      </div>
+      <img src="https://img.icons8.com/ios-filled/28/user-male-circle.png" alt="Profile" />
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <p><strong>Email:</strong> {{ email }}</p>
+
+      {% if not profile or request.args.get('edit') %}
+        <form method="post" id="profile-form" style="display: block;" autocomplete="off">
+          <input type="text" id="name" name="name" placeholder="Enter your name" value="{{ profile[0] if profile else '' }}" required />
+          <select name="gender" id="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Female" {% if profile and profile[1] == 'Female' %}selected{% endif %}>Female</option>
+            <option value="Male" {% if profile and profile[1] == 'Male' %}selected{% endif %}>Male</option>
+            <option value="Other" {% if profile and profile[1] == 'Other' %}selected{% endif %}>Other</option>
+          </select>
+          <input type="date" id="dob" name="dob" onchange="calculateAge()" required />
+          <p id="age-display" style="margin-bottom: 10px;"></p>
+          <button type="submit">Save Profile</button>
+        </form>
+      {% else %}
+        <p><strong>Name:</strong> {{ profile[0] }}</p>
+        <p><strong>Gender:</strong> {{ profile[1] }}</p>
+        <p><strong>Age:</strong> {{ profile[2] }}</p>
+        <button onclick="showProfileForm('{{ profile[0] }}', '{{ profile[1] }}', '{{ profile[3] }}')">Edit Profile</button>
+      {% endif %}
+
+      <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Upload/Capture Popup -->
+    <div class="popup-buttons" id="popupButtons">
+      <button onclick="location.href='/upload'">Upload</button>
+      <button onclick="location.href='/camera'">Capture</button>
+    </div>
+
+    <!-- Floating Camera Button -->
+    <div class="camera-button" onclick="togglePopup()">
+      <img src="https://img.icons8.com/ios-filled/50/camera.png" alt="Camera" />
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <a href="{{ url_for('dashboard') }}"><img class="nav-icon" src="https://img.icons8.com/ios-filled/50/combo-chart--v1.png" alt="Dashboard" /></a>
+      <div style="width: 64px;"></div>
+      <a href="{{ url_for('result') }}"><img class="nav-icon" src="https://img.icons8.com/ios-filled/50/visible--v1.png" alt="Result" /></a>
+    </div>
+  </div>
 </body>
 </html>
-
-
-
-

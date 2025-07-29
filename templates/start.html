@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Camera - AnemoScan</title>
+  <title>AnemoScan</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
     body {
       margin: 0;
@@ -45,49 +46,35 @@
       cursor: pointer;
     }
 
-    .camera-container {
+    .main-content {
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      flex-grow: 1;
-      padding: 10px 15px;
-    }
-
-    video {
-      display: none;
-      width: 100%;
-      max-height: 320px;
-      border-radius: 12px;
-      background-color: #000;
-    }
-
-    .click-button {
-      margin-top: 12px;
-      padding: 8px 24px;
-      background-color: #0db9b9;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      font-size: 14px;
-      cursor: pointer;
-      display: none;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
     }
 
     .bottom-nav {
+      position: relative;
       height: 80px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       background-color: #d6f1f1;
       border-top: 1px solid #ccc;
-      position: relative;
     }
 
     .nav-icon {
       width: 28px;
       height: 28px;
       cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-icon:hover {
+      transform: scale(1.15);
     }
 
     .camera-button {
@@ -133,10 +120,12 @@
       color: white;
       font-size: 14px;
       cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.2s ease;
     }
 
-    form {
-      display: none;
+    .popup-buttons button:hover {
+      background-color: #006666;
     }
   </style>
 </head>
@@ -145,37 +134,54 @@
 
     <!-- Header -->
     <div class="header">
-      <img src="https://img.icons8.com/material-rounded/32/menu--v1.png" alt="Menu" />
-      <img src="https://img.icons8.com/ios-filled/32/user-male-circle.png" alt="Profile" />
+      <a href="{{ url_for('dashboard') }}">
+        <img src="{{ url_for('static', filename='icons/menu.png') }}" alt="Menu" />
+      </a>
+      <a href="{{ url_for('profile') }}">
+        <img src="{{ url_for('static', filename='icons/profile.png') }}" alt="Profile" />
+      </a>
     </div>
 
-    <!-- Camera Container -->
-    <div class="camera-container">
-      <video id="video" autoplay playsinline></video>
-      <button class="click-button" id="clickBtn">Click</button>
+    <!-- Main Content -->
+    <div class="main-content">
+      <h2 style="color: #008080;">Welcome to AnemoScan!</h2>
+      <p style="font-size: 14px; color: #555;">
+        Instantly detect signs of anemia using a simple image of your finger nail. Accurate, fast, and non-invasive.
+      </p>
+
+      <div style="text-align: left; width: 100%; font-size: 13px; color: #444;">
+        <h4 style="color: #008080;">How it works:</h4>
+        <ul style="padding-left: 18px; margin-top: 0; line-height: 1.6;">
+          <li>📸 Capture or upload your eye image</li>
+          <li>🔬 AI scans the conjunctiva region</li>
+          <li>📋 Get a visual result instantly</li>
+          <li>📂 See past scans in Dashboard</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 20px; padding: 12px; background: #f1fefe; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-size: 13px; color: #006666;">
+        💡 <strong>Did you know?</strong> Anemia affects over <b>1 in 4</b> people globally. Early detection is key to better health.
+      </div>
     </div>
 
-    <!-- Hidden upload form -->
-    <form id="uploadForm" method="POST" enctype="multipart/form-data">
-      <input id="fileInput" type="file" name="image" accept="image/*" required onchange="document.getElementById('uploadForm').submit()" />
-    </form>
-
-    <!-- Popup buttons -->
+    <!-- Upload / Capture Buttons -->
     <div class="popup-buttons" id="popupButtons">
-      <button onclick="triggerUpload()">Upload</button>
-      <button onclick="startCamera()">Capture</button>
+      <button onclick="window.location.href='{{ url_for('camera') }}'">Upload</button>
+      <button onclick="window.location.href='{{ url_for('camera') }}'">Capture</button>
     </div>
 
-    <!-- Floating camera icon -->
+    <!-- Camera Button -->
     <div class="camera-button" onclick="togglePopup()">
-      <img src="https://img.icons8.com/ios-filled/50/camera.png" alt="Camera" />
+      <img src="{{ url_for('static', filename='icons/camera.png') }}" alt="Camera" />
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-      <img class="nav-icon" src="https://img.icons8.com/ios-filled/50/combo-chart--v1.png" alt="Dashboard" onclick="location.href='/dashboard'" />
+      <img class="nav-icon" src="{{ url_for('static', filename='icons/dashboard.png') }}" alt="Dashboard"
+           onclick="window.location.href='{{ url_for('dashboard') }}'" />
       <div style="width: 64px;"></div>
-      <img class="nav-icon" src="https://img.icons8.com/ios-filled/50/visible--v1.png" alt="Result" onclick="location.href='/result'" />
+      <img class="nav-icon" src="{{ url_for('static', filename='icons/result.png') }}" alt="Result"
+           onclick="window.location.href='{{ url_for('result') }}'" />
     </div>
 
   </div>
@@ -185,28 +191,6 @@
       const popup = document.getElementById('popupButtons');
       popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
     }
-
-    function triggerUpload() {
-      document.getElementById('fileInput').click();
-    }
-
-    async function startCamera() {
-      const video = document.getElementById('video');
-      const clickBtn = document.getElementById('clickBtn');
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: navigator.userAgent.includes('Mobile') ? 'user' : 'environment'
-          }
-        });
-        video.srcObject = stream;
-        video.style.display = 'block';
-        clickBtn.style.display = 'inline-block';
-      } catch (e) {
-        alert("Camera permission denied or not available.");
-      }
-    }
   </script>
 </body>
 </html>
-
