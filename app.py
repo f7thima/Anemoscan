@@ -3,26 +3,25 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with a strong secret
+app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Create upload folder if it doesn't exist
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-# 1️⃣ Load Page (Default homepage)
+# 1️⃣ Load screen (shows for 5 seconds)
 @app.route('/')
 def load_page():
     return render_template('load.html')
 
-# 2️⃣ Login Page (index.html)
+# 2️⃣ Login Page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        # Dummy credentials
         if email == 'test@example.com' and password == 'pass':
             session['email'] = email
             return redirect(url_for('start'))
@@ -30,10 +29,22 @@ def login():
             error = 'Invalid credentials. Try again.'
     return render_template('index.html', error=error)
 
-# 3️⃣ Register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    error = None
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        if email == 'test@example.com':
+            error = 'Email already registered.'
+        else:
+            session['email'] = email  # Auto-login the user
+            flash('Account created successfully!')
+            return redirect(url_for('start'))  # Go to start page
+
+    return render_template('register.html', error=error)
+
 
 # 4️⃣ Start Page
 @app.route('/start')
@@ -76,6 +87,6 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
-# Run the app
+# Run app
 if __name__ == '__main__':
     app.run(debug=True)

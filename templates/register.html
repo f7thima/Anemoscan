@@ -1,23 +1,105 @@
+<!-- templates/register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Create Account - AnemoScan</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <title>Create Account - AnemoScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #e0f7f7;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .phone-container {
+      width: 360px;
+      height: 640px;
+      border-radius: 30px;
+      background-color: white;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #008080;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 260px;
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #008080;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #006666;
+    }
+
+    .error-message {
+      margin-top: 10px;
+      background-color: #ffe0e0;
+      color: #c00;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #008080;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Create Account</h2>
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form method="post">
-            <input type="email" name="email" placeholder="Email" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
-            <button type="submit">Create Account</button>
-        </form>
-        <p>Already have an account? <a href="{{ url_for('index') }}">Login here</a></p>
+  <div class="phone-container">
+    <h2>Create Account</h2>
+    <form action="{{ url_for('register') }}" method="post">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Register</button>
+      {% if error %}
+        <div class="error-message">{{ error }}</div>
+      {% endif %}
+    </form>
+    <div class="back-link">
+      <a href="{{ url_for('login') }}">← Back to Login</a>
     </div>
+  </div>
 </body>
 </html>
-

@@ -143,6 +143,14 @@
     </div>
 
     <!-- Main Content -->
+     {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div style="background-color: #d0f8e0; color: #006644; padding: 10px; margin: 10px; border-radius: 10px; font-size: 14px;">
+      {{ messages[0] }}
+    </div>
+  {% endif %}
+{% endwith %}
+
     <div class="main-content">
       <h2 style="color: #008080;">Welcome to AnemoScan!</h2>
       <p style="font-size: 14px; color: #555;">
