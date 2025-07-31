@@ -1,10 +1,10 @@
-<!-- templates/register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Create Account - AnemoScan</title>
+  <title>AnemoScan - Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
     body {
       margin: 0;
@@ -23,6 +23,30 @@
       border-radius: 30px;
       background-color: white;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .header {
+      width: 100%;
+      height: 60px;
+      background-color: #0db9b9;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 15px;
+      box-sizing: border-box;
+    }
+
+    .header img {
+      height: 32px;
+      cursor: pointer;
+    }
+
+    .main-content {
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -30,9 +54,10 @@
       padding: 20px;
     }
 
-    h2 {
+    .main-content h1 {
       color: #008080;
       margin-bottom: 20px;
+      font-size: 22px;
     }
 
     form {
@@ -42,7 +67,8 @@
       max-width: 260px;
     }
 
-    input {
+    input[type="email"],
+    input[type="password"] {
       padding: 10px;
       margin: 10px 0;
       border: 1px solid #ccc;
@@ -75,30 +101,39 @@
       text-align: center;
     }
 
-    .back-link {
-      margin-top: 20px;
+    .bottom-text {
       text-align: center;
-    }
-
-    .back-link a {
-      color: #008080;
-      text-decoration: none;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
   <div class="phone-container">
-    <h2>Create Account</h2>
-    <form action="{{ url_for('register') }}" method="post">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Register</button>
-      {% if error %}
-        <div class="error-message">{{ error }}</div>
-      {% endif %}
-    </form>
-    <div class="back-link">
-      <a href="{{ url_for('login') }}">← Back to Login</a>
+
+    <!-- Header -->
+    <div class="header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="https://img.icons8.com/material-rounded/32/menu--v1.png" alt="Menu" />
+        <h2 style="color: white; font-size: 20px; margin: 0;">Create Account</h2>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Register</h1>
+      <form action="{{ url_for('register') }}" method="post">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Create Account</button>
+        {% if error %}
+          <div class="error-message">{{ error }}</div>
+        {% endif %}
+      </form>
+
+      <div class="bottom-text">
+        <p>Already have an account?</p>
+        <a href="{{ url_for('login') }}"><button type="button">Back to Login</button></a>
+      </div>
     </div>
   </div>
 </body>

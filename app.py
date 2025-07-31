@@ -36,14 +36,18 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
+        # Dummy check: prevent same email from being reused
         if email == 'test@example.com':
             error = 'Email already registered.'
         else:
-            session['email'] = email  # Auto-login the user
-            flash('Account created successfully!')
-            return redirect(url_for('start'))  # Go to start page
+            # Instead of flashing and redirecting to login,
+            # set session to log the user in directly
+            session['email'] = email
+            # Normally you'd also save user data to the database here
+            return redirect(url_for('start'))
 
     return render_template('register.html', error=error)
+
 
 
 # 4️⃣ Start Page
